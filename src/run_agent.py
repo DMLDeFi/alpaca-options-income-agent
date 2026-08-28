@@ -3,6 +3,7 @@ import json
 
 import alpaca_cli as api
 import brain
+import publish
 import risk_gates
 import state
 import strategy
@@ -84,4 +85,7 @@ def run_cycle() -> dict:
 
 
 if __name__ == "__main__":
-    run_cycle()
+    try:
+        run_cycle()
+    finally:
+        publish.write_status()

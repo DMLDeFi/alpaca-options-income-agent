@@ -1,0 +1,38 @@
+{
+  "generated_at": "2026-08-28T23:55:26.825678+00:00",
+  "account": {
+    "equity": "100000",
+    "cash": "100000",
+    "buying_power": "400000",
+    "portfolio_value": "100000",
+    "options_trading_level": 3,
+    "status": "ACTIVE"
+  },
+  "positions": [],
+  "cycles": [
+    {
+      "timestamp": "2026-08-28T12:03:46.618451+00:00",
+      "equity": "100000",
+      "dry_run": true,
+      "status": "skipped_market_closed"
+    },
+    {
+      "timestamp": "2026-08-28T22:43:50.367560+00:00",
+      "equity": "100000",
+      "dry_run": true,
+      "status": "skipped_market_closed"
+    },
+    {
+      "timestamp": "2026-08-28T22:59:51.894027+00:00",
+      "equity": "100000",
+      "dry_run": true,
+      "status": "skipped_market_closed"
+    },
+    {
+      "timestamp": "2026-08-28T23:55:11.232312+00:00",
+      "equity": "100000",
+      "dry_run": false,
+      "status": "skipped_market_closed"
+    }
+  ]
+}
