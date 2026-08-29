@@ -4,245 +4,270 @@
 <meta charset="utf-8" />
 <title>Options Income Agent</title>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="description" content="An autonomous AI agent that trades defined-risk options income strategies on Alpaca — built for the Alpaca AI Trading Agents Hackathon." />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
 <style>
   :root {
-    --bg: #0b0f14;
+    --bg: #0a0d12;
+    --bg2: #0d1219;
     --panel: #121822;
-    --panel-border: #1f2937;
-    --text: #e6edf3;
+    --panel-2: #161f2c;
+    --border: #212b39;
+    --text: #eaf0f6;
     --muted: #8b98a5;
     --accent: #4fd1c5;
+    --accent-soft: rgba(79,209,197,0.12);
+    --violet: #8b8ff5;
     --green: #3fb950;
     --red: #f85149;
-    --amber: #d29922;
-    --mono: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
-    --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    --mono: "IBM Plex Mono", Consolas, monospace;
+    --heading: "Space Grotesk", var(--sans);
+    --sans: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   }
   * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
   body {
     margin: 0;
     background: var(--bg);
     color: var(--text);
     font-family: var(--sans);
-    padding: 24px 16px 64px;
+    line-height: 1.55;
   }
-  .wrap { max-width: 1000px; margin: 0 auto; }
+  a { color: inherit; }
+  .wrap { max-width: 1080px; margin: 0 auto; padding: 0 24px; }
 
-  header { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 12px; margin-bottom: 24px; }
-  h1 { font-size: 1.4rem; margin: 0; letter-spacing: -0.01em; }
-  h1 span { color: var(--accent); }
-  .sub { color: var(--muted); font-size: 0.85rem; }
-  .sub a { color: var(--accent); text-decoration: none; }
-  .sub a:hover { text-decoration: underline; }
+  /* ---- nav ---- */
+  nav { position: sticky; top: 0; z-index: 20; backdrop-filter: blur(10px); background: rgba(10,13,18,0.75); border-bottom: 1px solid var(--border); }
+  nav .wrap { display: flex; align-items: center; justify-content: space-between; height: 64px; }
+  .brand { font-family: var(--heading); font-weight: 700; font-size: 1.05rem; text-decoration: none; letter-spacing: -0.01em; }
+  .brand span { color: var(--accent); }
+  .nav-links { display: flex; gap: 28px; align-items: center; }
+  .nav-links a { text-decoration: none; color: var(--muted); font-size: 0.9rem; font-weight: 500; transition: color 0.15s; }
+  .nav-links a:hover { color: var(--text); }
+  .btn { display: inline-flex; align-items: center; gap: 8px; padding: 9px 18px; border-radius: 8px; font-weight: 600; font-size: 0.88rem; text-decoration: none; transition: transform 0.15s, box-shadow 0.15s; }
+  .btn-primary { background: var(--accent); color: #06222066; background: linear-gradient(135deg, var(--accent), #38b2ac); color: #04211f; box-shadow: 0 4px 20px rgba(79,209,197,0.25); }
+  .btn-primary:hover { transform: translateY(-1px); box-shadow: 0 6px 24px rgba(79,209,197,0.35); }
+  .btn-ghost { border: 1px solid var(--border); color: var(--text); }
+  .btn-ghost:hover { border-color: var(--accent); }
 
-  .badge { display: inline-flex; align-items: center; gap: 6px; font-size: 0.75rem; padding: 3px 10px; border-radius: 999px; border: 1px solid var(--panel-border); color: var(--muted); }
-  .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--muted); }
-  .dot.live { background: var(--green); box-shadow: 0 0 8px var(--green); }
+  /* ---- hero ---- */
+  .hero { position: relative; overflow: hidden; padding: 110px 0 90px; text-align: center; }
+  .hero::before {
+    content: ""; position: absolute; inset: -20% -10% auto -10%; height: 500px;
+    background: radial-gradient(50% 60% at 30% 20%, rgba(79,209,197,0.18), transparent 70%),
+                radial-gradient(40% 50% at 75% 10%, rgba(139,143,245,0.14), transparent 70%);
+    pointer-events: none;
+  }
+  .eyebrow { display: inline-flex; align-items: center; gap: 8px; font-size: 0.78rem; color: var(--accent); background: var(--accent-soft); border: 1px solid rgba(79,209,197,0.25); padding: 5px 14px; border-radius: 999px; font-weight: 600; letter-spacing: 0.02em; margin-bottom: 22px; }
+  h1 { font-family: var(--heading); font-size: clamp(2.2rem, 5vw, 3.4rem); line-height: 1.1; margin: 0 0 18px; letter-spacing: -0.02em; }
+  h1 .accent { background: linear-gradient(135deg, var(--accent), var(--violet)); -webkit-background-clip: text; background-clip: text; color: transparent; }
+  .lede { max-width: 620px; margin: 0 auto 34px; color: var(--muted); font-size: 1.08rem; }
+  .hero-ctas { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; margin-bottom: 56px; }
+  .btn-lg { padding: 13px 26px; font-size: 0.95rem; border-radius: 10px; }
 
-  .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; margin-bottom: 24px; }
-  .card { background: var(--panel); border: 1px solid var(--panel-border); border-radius: 10px; padding: 14px 16px; }
-  .card .label { color: var(--muted); font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 6px; }
-  .card .value { font-family: var(--mono); font-size: 1.35rem; font-weight: 600; }
-  .value.pos { color: var(--green); }
-  .value.neg { color: var(--red); }
+  .live-strip { display: flex; justify-content: center; gap: 0; flex-wrap: wrap; max-width: 780px; margin: 0 auto; border: 1px solid var(--border); border-radius: 14px; overflow: hidden; background: var(--panel); }
+  .live-strip .stat { flex: 1; min-width: 140px; padding: 18px 20px; text-align: left; border-right: 1px solid var(--border); }
+  .live-strip .stat:last-child { border-right: none; }
+  .live-strip .label { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--muted); margin-bottom: 6px; }
+  .live-strip .value { font-family: var(--mono); font-size: 1.15rem; font-weight: 600; }
 
-  section { margin-bottom: 28px; }
-  h2 { font-size: 0.95rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.05em; margin: 0 0 12px; font-weight: 600; }
+  /* ---- sections ---- */
+  section { padding: 80px 0; }
+  .section-head { text-align: center; max-width: 620px; margin: 0 auto 48px; }
+  .kicker { color: var(--accent); font-size: 0.78rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 10px; }
+  h2 { font-family: var(--heading); font-size: clamp(1.6rem, 3vw, 2.1rem); margin: 0 0 14px; letter-spacing: -0.01em; }
+  .section-head p { color: var(--muted); font-size: 1rem; margin: 0; }
 
-  .chart-panel { background: var(--panel); border: 1px solid var(--panel-border); border-radius: 10px; padding: 16px; }
-  svg text { fill: var(--muted); font-family: var(--mono); font-size: 10px; }
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  .card { background: var(--panel); border: 1px solid var(--border); border-radius: 14px; padding: 26px; }
+  .card h3 { font-family: var(--heading); font-size: 1.1rem; margin: 0 0 10px; }
+  .card p { color: var(--muted); font-size: 0.92rem; margin: 0; }
+  .card.warn { border-color: rgba(248,81,73,0.25); }
+  .card.warn h3 { color: #ff8a83; }
+  .card.good { border-color: rgba(63,185,80,0.3); }
+  .card.good h3 { color: #6bd97a; }
 
-  table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
-  th, td { text-align: left; padding: 8px 10px; border-bottom: 1px solid var(--panel-border); }
-  th { color: var(--muted); font-weight: 600; font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.03em; }
-  td.mono, th.mono { font-family: var(--mono); }
-  .empty { color: var(--muted); font-size: 0.85rem; padding: 16px; text-align: center; background: var(--panel); border: 1px dashed var(--panel-border); border-radius: 10px; }
+  .pipeline { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
+  .step { background: var(--panel); border: 1px solid var(--border); border-radius: 14px; padding: 22px 18px; position: relative; }
+  .step-num { font-family: var(--mono); color: var(--accent); font-size: 0.78rem; font-weight: 600; margin-bottom: 10px; }
+  .step h3 { font-family: var(--heading); font-size: 1rem; margin: 0 0 8px; }
+  .step p { color: var(--muted); font-size: 0.85rem; margin: 0; }
+  .step-arrow { display: none; }
 
-  .cycle { background: var(--panel); border: 1px solid var(--panel-border); border-radius: 10px; padding: 14px 16px; margin-bottom: 10px; }
-  .cycle-head { display: flex; justify-content: space-between; align-items: center; gap: 10px; margin-bottom: 4px; }
-  .cycle-time { font-family: var(--mono); font-size: 0.78rem; color: var(--muted); }
-  .cycle-status { font-size: 0.75rem; padding: 2px 8px; border-radius: 6px; }
-  .status-quiet { color: var(--muted); }
-  .status-halt { color: var(--amber); }
+  .gates { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
+  .gate { background: var(--panel-2); border: 1px solid var(--border); border-radius: 12px; padding: 18px; text-align: center; }
+  .gate .num { font-family: var(--mono); font-size: 1.5rem; font-weight: 700; color: var(--accent); margin-bottom: 6px; }
+  .gate .label { color: var(--muted); font-size: 0.8rem; }
 
-  .decision { border-top: 1px solid var(--panel-border); padding: 10px 0 0; margin-top: 10px; }
-  .decision-head { display: flex; align-items: center; gap: 8px; font-family: var(--mono); font-size: 0.85rem; margin-bottom: 4px; flex-wrap: wrap; }
-  .pill { font-size: 0.68rem; padding: 2px 7px; border-radius: 5px; font-weight: 700; letter-spacing: 0.02em; }
-  .pill.approve { background: rgba(63,185,80,0.15); color: var(--green); }
-  .pill.reject { background: rgba(139,148,165,0.15); color: var(--muted); }
-  .decision-nums { color: var(--muted); }
-  .decision-reason { color: var(--text); font-size: 0.85rem; line-height: 1.5; opacity: 0.9; }
+  .stack { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; }
+  .chip { display: inline-flex; align-items: center; gap: 8px; background: var(--panel); border: 1px solid var(--border); border-radius: 999px; padding: 9px 16px; font-size: 0.85rem; font-weight: 500; }
+  .chip b { color: var(--accent); }
 
-  footer { text-align: center; color: var(--muted); font-size: 0.75rem; margin-top: 40px; }
-  footer a { color: var(--accent); }
+  .cta-band { text-align: center; background: linear-gradient(135deg, rgba(79,209,197,0.1), rgba(139,143,245,0.08)); border: 1px solid var(--border); border-radius: 20px; padding: 56px 32px; }
+  .cta-band h2 { margin-bottom: 12px; }
+  .cta-band p { color: var(--muted); margin-bottom: 26px; }
+
+  footer { border-top: 1px solid var(--border); padding: 32px 0; text-align: center; color: var(--muted); font-size: 0.82rem; }
+  footer a { color: var(--accent); text-decoration: none; }
+  footer .disclaimer { max-width: 560px; margin: 10px auto 0; opacity: 0.75; }
+
+  @media (max-width: 800px) {
+    .grid-2, .pipeline, .gates { grid-template-columns: 1fr 1fr; }
+    .nav-links { display: none; }
+  }
+  @media (max-width: 480px) {
+    .grid-2, .pipeline, .gates { grid-template-columns: 1fr; }
+    .live-strip { flex-direction: column; }
+    .live-strip .stat { border-right: none; border-bottom: 1px solid var(--border); }
+  }
 </style>
 </head>
 <body>
-<div class="wrap">
-  <header>
-    <div>
-      <h1>Options <span>Income Agent</span></h1>
-      <div class="sub">Autonomous options-income trading agent · Alpaca AI Trading Agents Hackathon</div>
+
+<nav>
+  <div class="wrap">
+    <a class="brand" href="#top">Options<span>Income</span>Agent</a>
+    <div class="nav-links">
+      <a href="#how">How it works</a>
+      <a href="#risk">Risk gates</a>
+      <a href="https://github.com/DMLDeFi/alpaca-options-income-agent" target="_blank">GitHub</a>
+      <a class="btn btn-primary" href="live.html">Live Dashboard →</a>
     </div>
-    <div style="text-align:right">
-      <span class="badge"><span class="dot live" id="live-dot"></span><span id="updated-text">loading…</span></span>
-      <div class="sub" style="margin-top:6px">
-        <a href="https://github.com/DMLDeFi/alpaca-options-income-agent" target="_blank">GitHub</a> ·
-        Alpaca acct <span style="font-family:var(--mono)">PA3W1Q2MFEZ8</span>
+  </div>
+</nav>
+
+<div id="top" class="hero">
+  <div class="wrap">
+    <div class="eyebrow">● Alpaca AI Trading Agents Hackathon · lablab.ai</div>
+    <h1>Welcome to the<br><span class="accent">Options Income Agent</span></h1>
+    <p class="lede">An autonomous AI agent that sells defined-risk options spreads for steady premium
+    income on Alpaca's paper-trading platform — reasoning through every trade with Claude, gated by
+    hard-coded risk limits it can never override.</p>
+    <div class="hero-ctas">
+      <a class="btn btn-primary btn-lg" href="live.html">View Live Dashboard →</a>
+      <a class="btn btn-ghost btn-lg" href="https://github.com/DMLDeFi/alpaca-options-income-agent" target="_blank">View Source on GitHub</a>
+    </div>
+
+    <div class="live-strip" id="live-strip">
+      <div class="stat"><div class="label">Equity</div><div class="value" id="ls-equity">—</div></div>
+      <div class="stat"><div class="label">P&amp;L</div><div class="value" id="ls-pl">—</div></div>
+      <div class="stat"><div class="label">Open Positions</div><div class="value" id="ls-pos">—</div></div>
+      <div class="stat"><div class="label">Status</div><div class="value" id="ls-status" style="color:var(--accent)">Live</div></div>
+    </div>
+  </div>
+</div>
+
+<section id="problem">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="kicker">The Problem</div>
+      <h2>Humans aren't bad at options trading — they're bad at discipline</h2>
+      <p>Options reward consistency under stress: tracking volatility, sizing positions, and enforcing
+      risk limits continuously, without emotion. Most traders don't lack strategy knowledge — they
+      override their own rules the moment a position moves against them.</p>
+    </div>
+    <div class="grid-2">
+      <div class="card warn">
+        <h3>What breaks a human trader</h3>
+        <p>Letting a loser run "just a bit longer," closing winners too early out of anxiety, and
+        drifting position sizes up after a good week — none of it is a knowledge problem.</p>
+      </div>
+      <div class="card good">
+        <h3>What an agent is built for</h3>
+        <p>Apply the same risk gate to trade #1 and trade #100. Never negotiate with a stop. React the
+        instant a limit is breached, at 3am or 3pm, every single time.</p>
       </div>
     </div>
-  </header>
+  </div>
+</section>
 
-  <div class="cards" id="cards"></div>
+<section id="how">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="kicker">How It Works</div>
+      <h2>Scan → Risk Gate → Reason → Execute</h2>
+      <p>Every cycle runs the same four-stage pipeline, autonomously, several times a day.</p>
+    </div>
+    <div class="pipeline">
+      <div class="step"><div class="step-num">01</div><h3>Scan the universe</h3><p>Pulls live option chains across 15 liquid names and builds defined-risk credit spreads sized off each name's own realized volatility.</p></div>
+      <div class="step"><div class="step-num">02</div><h3>Hard risk gates</h3><p>Every candidate is filtered by max-loss, total-exposure, and position-count caps before anything else sees it.</p></div>
+      <div class="step"><div class="step-num">03</div><h3>Claude reasons</h3><p>What survives the gates is judged by Claude for trade quality, data sanity, and portfolio-level redundancy.</p></div>
+      <div class="step"><div class="step-num">04</div><h3>Execute on Alpaca</h3><p>Approved trades go out as net-credit limit orders through Alpaca's official CLI — the same tool built for unattended agents.</p></div>
+    </div>
+  </div>
+</section>
 
-  <section>
-    <h2>Equity, this session</h2>
-    <div class="chart-panel"><svg id="chart" viewBox="0 0 900 220" width="100%" height="220" preserveAspectRatio="none"></svg></div>
-  </section>
+<section id="risk">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="kicker">Risk Gates</div>
+      <h2>The AI can reject a trade. It can never approve one that breaks these.</h2>
+      <p>Enforced in code, before the reasoning step ever runs.</p>
+    </div>
+    <div class="gates">
+      <div class="gate"><div class="num">3%</div><div class="label">Max loss per trade</div></div>
+      <div class="gate"><div class="num">15%</div><div class="label">Max total open risk</div></div>
+      <div class="gate"><div class="num">6</div><div class="label">Max open positions</div></div>
+      <div class="gate"><div class="num">5%</div><div class="label">Daily loss circuit breaker</div></div>
+    </div>
+  </div>
+</section>
 
-  <section>
-    <h2>Open positions</h2>
-    <div id="positions"></div>
-  </section>
+<section id="stack">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="kicker">Built With</div>
+      <h2>Alpaca's full agent stack</h2>
+    </div>
+    <div class="stack">
+      <span class="chip">⚡ <b>Alpaca Trading API</b></span>
+      <span class="chip">⌨️ <b>Alpaca CLI</b> for autonomous execution</span>
+      <span class="chip">🔌 <b>Alpaca MCP Server</b> for interactive dev</span>
+      <span class="chip">🧠 <b>Claude</b> reasoning layer</span>
+      <span class="chip">📄 <b>Paper Trading</b> — $100k, options level 3</span>
+    </div>
+  </div>
+</section>
 
-  <section>
-    <h2>Decision feed</h2>
-    <div id="feed"></div>
-  </section>
+<section>
+  <div class="wrap">
+    <div class="cta-band">
+      <h2>See it trading right now</h2>
+      <p>Live equity, open positions, and the AI's actual reasoning for every trade it takes or skips.</p>
+      <a class="btn btn-primary btn-lg" href="live.html">Open the Live Dashboard →</a>
+    </div>
+  </div>
+</section>
 
-  <footer>
-    Paper trading only — simulated funds, not investment advice. Data refreshes automatically from the live agent.
-  </footer>
-</div>
+<footer>
+  <div class="wrap">
+    <div><a href="https://github.com/DMLDeFi/alpaca-options-income-agent" target="_blank">GitHub</a> · Alpaca paper account <span style="font-family:var(--mono)">PA3W1Q2MFEZ8</span> · Built for the Alpaca AI Trading Agents Hackathon (lablab.ai)</div>
+    <div class="disclaimer">Paper trading only — simulated funds, no real capital. Nothing on this page is investment advice; results are hypothetical and do not represent real trading or future performance.</div>
+  </div>
+</footer>
 
 <script>
 const STATUS_URL = "https://raw.githubusercontent.com/DMLDeFi/alpaca-options-income-agent/master/public/status.json";
 const STARTING_EQUITY = 100000;
-
 function fmtMoney(n) {
   const v = typeof n === "string" ? parseFloat(n) : n;
-  return "$" + v.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  return "$" + v.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 0 });
 }
-function fmtPct(n) {
-  const sign = n >= 0 ? "+" : "";
-  return sign + n.toFixed(2) + "%";
-}
-function timeAgo(iso) {
-  const s = Math.max(0, (Date.now() - new Date(iso).getTime()) / 1000);
-  if (s < 60) return Math.floor(s) + "s ago";
-  if (s < 3600) return Math.floor(s / 60) + "m ago";
-  if (s < 86400) return Math.floor(s / 3600) + "h ago";
-  return Math.floor(s / 86400) + "d ago";
-}
-
-function renderCards(status) {
-  const eq = parseFloat(status.account.equity);
-  const pl = eq - STARTING_EQUITY;
-  const plPct = (pl / STARTING_EQUITY) * 100;
-  const openCount = status.positions.length;
-
-  document.getElementById("cards").innerHTML = `
-    <div class="card"><div class="label">Equity</div><div class="value">${fmtMoney(eq)}</div></div>
-    <div class="card"><div class="label">P&amp;L since start</div><div class="value ${pl >= 0 ? "pos" : "neg"}">${pl >= 0 ? "+" : ""}${fmtMoney(pl)} (${fmtPct(plPct)})</div></div>
-    <div class="card"><div class="label">Cash</div><div class="value">${fmtMoney(status.account.cash)}</div></div>
-    <div class="card"><div class="label">Buying power</div><div class="value">${fmtMoney(status.account.buying_power)}</div></div>
-    <div class="card"><div class="label">Open positions</div><div class="value">${openCount}</div></div>
-  `;
-}
-
-function renderChart(cycles) {
-  const pts = cycles.filter(c => c.equity).map(c => ({ t: c.timestamp, eq: parseFloat(c.equity) }));
-  const svg = document.getElementById("chart");
-  if (pts.length < 2) {
-    svg.innerHTML = `<text x="450" y="110" text-anchor="middle">Not enough data yet — check back after a few cycles</text>`;
-    return;
-  }
-  const w = 900, h = 220, padL = 60, padR = 10, padT = 15, padB = 15;
-  const eqs = pts.map(p => p.eq);
-  const min = Math.min(...eqs, STARTING_EQUITY), max = Math.max(...eqs, STARTING_EQUITY);
-  const range = (max - min) || 1;
-  const x = i => padL + (i / (pts.length - 1)) * (w - padL - padR);
-  const y = v => padT + (1 - (v - min) / range) * (h - padT - padB);
-
-  const path = pts.map((p, i) => `${i === 0 ? "M" : "L"}${x(i).toFixed(1)},${y(p.eq).toFixed(1)}`).join(" ");
-  const baseline = y(STARTING_EQUITY);
-
-  svg.innerHTML = `
-    <line x1="${padL}" y1="${baseline}" x2="${w - padR}" y2="${baseline}" stroke="#2a3542" stroke-dasharray="4,4" />
-    <text x="${padL - 8}" y="${baseline + 3}" text-anchor="end">$${(STARTING_EQUITY/1000).toFixed(0)}k</text>
-    <path d="${path}" fill="none" stroke="#4fd1c5" stroke-width="2" />
-    <text x="${padL - 8}" y="${y(max) + 3}" text-anchor="end">$${(max/1000).toFixed(1)}k</text>
-    <text x="${padL - 8}" y="${y(min) + 3}" text-anchor="end">$${(min/1000).toFixed(1)}k</text>
-  `;
-}
-
-function renderPositions(positions) {
-  const el = document.getElementById("positions");
-  if (!positions.length) {
-    el.innerHTML = `<div class="empty">No open positions right now.</div>`;
-    return;
-  }
-  el.innerHTML = `<table>
-    <thead><tr><th>Symbol</th><th>Side</th><th class="mono">Qty</th><th class="mono">Mkt Value</th><th class="mono">Unrealized P&amp;L</th></tr></thead>
-    <tbody>${positions.map(p => `
-      <tr>
-        <td class="mono">${p.symbol}</td>
-        <td>${p.side || "—"}</td>
-        <td class="mono">${p.qty}</td>
-        <td class="mono">${fmtMoney(p.market_value)}</td>
-        <td class="mono" style="color:${parseFloat(p.unrealized_pl) >= 0 ? "var(--green)" : "var(--red)"}">${fmtMoney(p.unrealized_pl)}</td>
-      </tr>`).join("")}
-    </tbody>
-  </table>`;
-}
-
-function renderFeed(cycles) {
-  const el = document.getElementById("feed");
-  const reversed = [...cycles].reverse();
-  el.innerHTML = reversed.map(c => {
-    const time = `${new Date(c.timestamp).toLocaleString()} · ${timeAgo(c.timestamp)}`;
-    if (c.status === "skipped_market_closed") {
-      return `<div class="cycle"><div class="cycle-head"><span class="cycle-time">${time}</span><span class="cycle-status status-quiet">Market closed</span></div></div>`;
-    }
-    if (c.status === "halted_circuit_breaker") {
-      return `<div class="cycle"><div class="cycle-head"><span class="cycle-time">${time}</span><span class="cycle-status status-halt">Circuit breaker</span></div><div class="decision-reason">${c.reason || ""}</div></div>`;
-    }
-    const decisions = (c.decisions || []).map(d => `
-      <div class="decision">
-        <div class="decision-head">
-          <span class="pill ${d.approved ? "approve" : "reject"}">${d.approved ? "ENTERED" : "SKIPPED"}</span>
-          <strong>${d.symbol}</strong>
-          <span class="decision-nums">${d.kind} · credit ${fmtMoney(d.credit)} · max loss ${fmtMoney(d.max_loss)}</span>
-        </div>
-        <div class="decision-reason">${d.reason}</div>
-      </div>`).join("");
-    return `<div class="cycle">
-      <div class="cycle-head"><span class="cycle-time">${time}</span><span class="cycle-status status-quiet">${c.candidates_found} scanned · ${c.candidates_risk_approved} passed risk gates</span></div>
-      ${decisions || '<div class="decision-reason">No candidates cleared the risk gates this cycle.</div>'}
-    </div>`;
-  }).join("");
-  if (!reversed.length) el.innerHTML = `<div class="empty">No cycles logged yet.</div>`;
-}
-
-async function refresh() {
-  try {
-    const res = await fetch(STATUS_URL + "?t=" + Date.now(), { cache: "no-store" });
-    const status = await res.json();
-    document.getElementById("updated-text").textContent = "updated " + timeAgo(status.generated_at);
-    document.getElementById("live-dot").className = "dot live";
-    renderCards(status);
-    renderChart(status.cycles);
-    renderPositions(status.positions);
-    renderFeed(status.cycles);
-  } catch (e) {
-    document.getElementById("updated-text").textContent = "unable to load status";
-    document.getElementById("live-dot").className = "dot";
-    console.error(e);
-  }
-}
-
-refresh();
-setInterval(refresh, 60000);
+fetch(STATUS_URL + "?t=" + Date.now(), { cache: "no-store" })
+  .then(r => r.json())
+  .then(s => {
+    const eq = parseFloat(s.account.equity);
+    const pl = eq - STARTING_EQUITY;
+    document.getElementById("ls-equity").textContent = fmtMoney(eq);
+    const plEl = document.getElementById("ls-pl");
+    plEl.textContent = (pl >= 0 ? "+" : "") + fmtMoney(pl);
+    plEl.style.color = pl >= 0 ? "var(--green)" : "var(--red)";
+    document.getElementById("ls-pos").textContent = s.positions.length;
+  })
+  .catch(() => { document.getElementById("ls-status").textContent = "Starting…"; });
 </script>
+
 </body>
 </html>
