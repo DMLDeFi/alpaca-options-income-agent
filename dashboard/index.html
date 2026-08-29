@@ -5,6 +5,12 @@
 <title>Options Income Agent</title>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <meta name="description" content="An autonomous AI agent that trades defined-risk options income strategies on Alpaca — built for the Alpaca AI Trading Agents Hackathon." />
+<meta name="theme-color" content="#0a0d12" />
+<meta property="og:title" content="Options Income Agent" />
+<meta property="og:description" content="An autonomous AI agent that trades defined-risk options income strategies on Alpaca, reasoning through every trade with Claude." />
+<meta property="og:type" content="website" />
+<meta name="twitter:card" content="summary" />
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='22' fill='%230a0d12'/%3E%3Cpath d='M18 66 L40 46 L55 59 L83 27' stroke='%234fd1c5' stroke-width='9' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3Ccircle cx='83' cy='27' r='7' fill='%234fd1c5'/%3E%3C/svg%3E" />
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
@@ -44,8 +50,9 @@
   .brand { font-family: var(--heading); font-weight: 700; font-size: 1.05rem; text-decoration: none; letter-spacing: -0.01em; }
   .brand span { color: var(--accent); }
   .nav-links { display: flex; gap: 28px; align-items: center; }
-  .nav-links a { text-decoration: none; color: var(--muted); font-size: 0.9rem; font-weight: 500; transition: color 0.15s; }
+  .nav-links a { text-decoration: none; color: var(--muted); font-size: 0.9rem; font-weight: 500; transition: color 0.15s; position: relative; }
   .nav-links a:hover { color: var(--text); }
+  .nav-links a.active { color: var(--accent); }
   .btn { display: inline-flex; align-items: center; gap: 8px; padding: 9px 18px; border-radius: 8px; font-weight: 600; font-size: 0.88rem; text-decoration: none; transition: transform 0.15s, box-shadow 0.15s; }
   .btn-primary { background: var(--accent); color: #06222066; background: linear-gradient(135deg, var(--accent), #38b2ac); color: #04211f; box-shadow: 0 4px 20px rgba(79,209,197,0.25); }
   .btn-primary:hover { transform: translateY(-1px); box-shadow: 0 6px 24px rgba(79,209,197,0.35); }
@@ -60,6 +67,26 @@
                 radial-gradient(40% 50% at 75% 10%, rgba(139,143,245,0.14), transparent 70%);
     pointer-events: none;
   }
+  .hero::after {
+    content: ""; position: absolute; inset: 0; z-index: 0; opacity: 0.5;
+    background-image: linear-gradient(rgba(255,255,255,0.035) 1px, transparent 1px),
+                       linear-gradient(90deg, rgba(255,255,255,0.035) 1px, transparent 1px);
+    background-size: 44px 44px;
+    mask-image: radial-gradient(ellipse 70% 60% at 50% 20%, black 40%, transparent 90%);
+    pointer-events: none;
+  }
+  .hero .wrap { position: relative; z-index: 1; }
+
+  /* ---- scroll reveal ---- */
+  .reveal { opacity: 0; transform: translateY(26px); transition: opacity 0.7s cubic-bezier(.2,.7,.3,1), transform 0.7s cubic-bezier(.2,.7,.3,1); }
+  .reveal.in { opacity: 1; transform: none; }
+  .reveal-stagger.in .r-item:nth-child(1) { transition-delay: 0s; }
+  .reveal-stagger.in .r-item:nth-child(2) { transition-delay: 0.08s; }
+  .reveal-stagger.in .r-item:nth-child(3) { transition-delay: 0.16s; }
+  .reveal-stagger.in .r-item:nth-child(4) { transition-delay: 0.24s; }
+  .reveal-stagger.in .r-item:nth-child(5) { transition-delay: 0.32s; }
+  .reveal-stagger .r-item { opacity: 0; transform: translateY(20px); transition: opacity 0.6s ease, transform 0.6s ease; }
+  .reveal-stagger.in .r-item { opacity: 1; transform: none; }
   .eyebrow { display: inline-flex; align-items: center; gap: 8px; font-size: 0.78rem; color: var(--accent); background: var(--accent-soft); border: 1px solid rgba(79,209,197,0.25); padding: 5px 14px; border-radius: 999px; font-weight: 600; letter-spacing: 0.02em; margin-bottom: 22px; }
   h1 { font-family: var(--heading); font-size: clamp(2.2rem, 5vw, 3.4rem); line-height: 1.1; margin: 0 0 18px; letter-spacing: -0.02em; }
   h1 .accent { background: linear-gradient(135deg, var(--accent), var(--violet)); -webkit-background-clip: text; background-clip: text; color: transparent; }
@@ -89,21 +116,53 @@
   .card.good { border-color: rgba(63,185,80,0.3); }
   .card.good h3 { color: #6bd97a; }
 
-  .pipeline { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
-  .step { background: var(--panel); border: 1px solid var(--border); border-radius: 14px; padding: 22px 18px; position: relative; }
-  .step-num { font-family: var(--mono); color: var(--accent); font-size: 0.78rem; font-weight: 600; margin-bottom: 10px; }
-  .step h3 { font-family: var(--heading); font-size: 1rem; margin: 0 0 8px; }
-  .step p { color: var(--muted); font-size: 0.85rem; margin: 0; }
-  .step-arrow { display: none; }
+  /* ---- diff-style problem comparison ---- */
+  .diff { background: #0d1117; border: 1px solid var(--border); border-radius: 16px; overflow: hidden; }
+  .diff-cols { display: grid; grid-template-columns: 1fr 1fr; }
+  .diff-col { padding: 0; }
+  .diff-col + .diff-col { border-left: 1px solid var(--border); }
+  .diff-col-head { display: flex; align-items: center; gap: 8px; padding: 14px 20px; border-bottom: 1px solid var(--border); font-family: var(--mono); font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--muted); }
+  .diff-col-head .swatch { width: 8px; height: 8px; border-radius: 2px; }
+  .diff-line { display: flex; gap: 12px; padding: 14px 20px; border-left: 3px solid transparent; font-size: 0.9rem; }
+  .diff-line + .diff-line { border-top: 1px solid rgba(255,255,255,0.03); }
+  .diff-line.rm { background: rgba(248,81,73,0.06); border-left-color: var(--red); }
+  .diff-line.add { background: rgba(63,185,80,0.06); border-left-color: var(--green); }
+  .diff-sign { font-family: var(--mono); font-weight: 700; flex-shrink: 0; }
+  .diff-line.rm .diff-sign { color: var(--red); }
+  .diff-line.add .diff-sign { color: var(--green); }
+  .diff-text { color: var(--text); opacity: 0.92; }
 
-  .gates { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
-  .gate { background: var(--panel-2); border: 1px solid var(--border); border-radius: 12px; padding: 18px; text-align: center; }
-  .gate .num { font-family: var(--mono); font-size: 1.5rem; font-weight: 700; color: var(--accent); margin-bottom: 6px; }
-  .gate .label { color: var(--muted); font-size: 0.8rem; }
+  /* ---- connected flow diagram ---- */
+  .flow-row { position: relative; display: grid; grid-template-columns: repeat(4, 1fr); margin-bottom: 22px; }
+  .flow-line { position: absolute; top: 21px; left: 12.5%; right: 12.5%; height: 2px; background: var(--border); z-index: 0; }
+  .flow-line-fill { position: absolute; top: 0; left: 0; height: 100%; width: 0%; background: linear-gradient(90deg, var(--accent), var(--violet)); transition: width 1.4s cubic-bezier(.2,.7,.3,1); }
+  .flow-row.in .flow-line-fill { width: 100%; }
+  .node-circle { position: relative; z-index: 1; width: 44px; height: 44px; border-radius: 50%; background: var(--bg); border: 2px solid var(--border); display: flex; align-items: center; justify-content: center; font-family: var(--mono); font-weight: 700; color: var(--muted); margin: 0 auto; transition: border-color 0.5s ease, color 0.5s ease, box-shadow 0.5s ease; }
+  .flow-row.in .node-circle { border-color: var(--accent); color: var(--accent); box-shadow: 0 0 0 4px var(--accent-soft); }
+  .flow-cards { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
+  .flow-card { background: var(--panel); border: 1px solid var(--border); border-radius: 14px; padding: 18px; text-align: center; transition: transform 0.2s, border-color 0.2s; }
+  .flow-card:hover { transform: translateY(-3px); border-color: var(--accent); }
+  .flow-card h3 { font-family: var(--heading); font-size: 0.95rem; margin: 0 0 8px; }
+  .flow-card p { color: var(--muted); font-size: 0.84rem; margin: 0; }
 
-  .stack { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; }
-  .chip { display: inline-flex; align-items: center; gap: 8px; background: var(--panel); border: 1px solid var(--border); border-radius: 999px; padding: 9px 16px; font-size: 0.85rem; font-weight: 500; }
-  .chip b { color: var(--accent); }
+  /* ---- breaker panel ---- */
+  .breaker-panel { background: linear-gradient(180deg, #131922, #0d1117); border: 1px solid var(--border); border-radius: 16px; padding: 8px 24px; }
+  .breaker-row { display: flex; align-items: center; gap: 14px; padding: 16px 0; }
+  .breaker-row + .breaker-row { border-top: 1px solid var(--border); }
+  .breaker-led { width: 9px; height: 9px; border-radius: 50%; background: var(--green); box-shadow: 0 0 9px var(--green); flex-shrink: 0; }
+  .breaker-switch { width: 34px; height: 18px; border-radius: 4px; background: rgba(63,185,80,0.12); border: 1px solid var(--green); position: relative; flex-shrink: 0; }
+  .breaker-switch::after { content: ""; position: absolute; top: 2px; right: 2px; width: 12px; height: 12px; background: var(--green); border-radius: 2px; }
+  .breaker-label { flex: 1; color: var(--text); font-size: 0.92rem; }
+  .breaker-value { font-family: var(--mono); font-weight: 700; color: var(--accent); font-size: 1.15rem; min-width: 48px; text-align: right; }
+  .breaker-armed { font-size: 0.65rem; color: var(--green); text-transform: uppercase; letter-spacing: 0.05em; font-weight: 700; background: rgba(63,185,80,0.12); padding: 3px 9px; border-radius: 5px; white-space: nowrap; }
+
+  /* ---- tech stack icon grid ---- */
+  .stack-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 14px; }
+  .stack-item { background: var(--panel); border: 1px solid var(--border); border-radius: 14px; padding: 24px 14px; text-align: center; transition: transform 0.2s, border-color 0.2s; }
+  .stack-item:hover { transform: translateY(-3px); border-color: var(--accent); }
+  .stack-icon { color: var(--accent); margin-bottom: 12px; }
+  .stack-item h4 { font-family: var(--heading); font-size: 0.88rem; margin: 0 0 4px; }
+  .stack-item p { color: var(--muted); font-size: 0.76rem; margin: 0; line-height: 1.4; }
 
   .cta-band { text-align: center; background: linear-gradient(135deg, rgba(79,209,197,0.1), rgba(139,143,245,0.08)); border: 1px solid var(--border); border-radius: 20px; padding: 56px 32px; }
   .cta-band h2 { margin-bottom: 12px; }
@@ -114,11 +173,14 @@
   footer .disclaimer { max-width: 560px; margin: 10px auto 0; opacity: 0.75; }
 
   @media (max-width: 800px) {
-    .grid-2, .pipeline, .gates { grid-template-columns: 1fr 1fr; }
+    .grid-2, .flow-cards, .stack-grid { grid-template-columns: 1fr 1fr; }
+    .diff-cols { grid-template-columns: 1fr; }
+    .diff-col + .diff-col { border-left: none; border-top: 1px solid var(--border); }
+    .flow-row, .flow-line { display: none; }
     .nav-links { display: none; }
   }
   @media (max-width: 480px) {
-    .grid-2, .pipeline, .gates { grid-template-columns: 1fr; }
+    .grid-2, .flow-cards, .stack-grid { grid-template-columns: 1fr; }
     .live-strip { flex-direction: column; }
     .live-strip .stat { border-right: none; border-bottom: 1px solid var(--border); }
   }
@@ -161,23 +223,29 @@
 
 <section id="problem">
   <div class="wrap">
-    <div class="section-head">
+    <div class="section-head reveal">
       <div class="kicker">The Problem</div>
       <h2>Humans aren't bad at options trading — they're bad at discipline</h2>
       <p>Options reward consistency under stress: tracking volatility, sizing positions, and enforcing
       risk limits continuously, without emotion. Most traders don't lack strategy knowledge — they
       override their own rules the moment a position moves against them.</p>
     </div>
-    <div class="grid-2">
-      <div class="card warn">
-        <h3>What breaks a human trader</h3>
-        <p>Letting a loser run "just a bit longer," closing winners too early out of anxiety, and
-        drifting position sizes up after a good week — none of it is a knowledge problem.</p>
-      </div>
-      <div class="card good">
-        <h3>What an agent is built for</h3>
-        <p>Apply the same risk gate to trade #1 and trade #100. Never negotiate with a stop. React the
-        instant a limit is breached, at 3am or 3pm, every single time.</p>
+    <div class="diff reveal">
+      <div class="diff-cols">
+        <div class="diff-col">
+          <div class="diff-col-head"><span class="swatch" style="background:var(--red)"></span> human_trader.log</div>
+          <div class="diff-line rm"><span class="diff-sign">−</span><span class="diff-text">Lets a loser run "just a bit longer," hoping it turns around</span></div>
+          <div class="diff-line rm"><span class="diff-sign">−</span><span class="diff-text">Closes winners early out of anxiety, capping the upside</span></div>
+          <div class="diff-line rm"><span class="diff-sign">−</span><span class="diff-text">Drifts position size up after a good week</span></div>
+          <div class="diff-line rm"><span class="diff-sign">−</span><span class="diff-text">Skips the risk check when the setup "feels right"</span></div>
+        </div>
+        <div class="diff-col">
+          <div class="diff-col-head"><span class="swatch" style="background:var(--green)"></span> agent_trader.log</div>
+          <div class="diff-line add"><span class="diff-sign">+</span><span class="diff-text">Applies the same max-loss gate to trade #1 and trade #100</span></div>
+          <div class="diff-line add"><span class="diff-sign">+</span><span class="diff-text">Never negotiates with a stop or a circuit breaker</span></div>
+          <div class="diff-line add"><span class="diff-sign">+</span><span class="diff-text">Sizes every trade off the same coded risk budget</span></div>
+          <div class="diff-line add"><span class="diff-sign">+</span><span class="diff-text">Reacts the instant a limit is breached — 3am or 3pm</span></div>
+        </div>
       </div>
     </div>
   </div>
@@ -185,55 +253,99 @@
 
 <section id="how">
   <div class="wrap">
-    <div class="section-head">
+    <div class="section-head reveal">
       <div class="kicker">How It Works</div>
       <h2>Scan → Risk Gate → Reason → Execute</h2>
       <p>Every cycle runs the same four-stage pipeline, autonomously, several times a day.</p>
     </div>
-    <div class="pipeline">
-      <div class="step"><div class="step-num">01</div><h3>Scan the universe</h3><p>Pulls live option chains across 15 liquid names and builds defined-risk credit spreads sized off each name's own realized volatility.</p></div>
-      <div class="step"><div class="step-num">02</div><h3>Hard risk gates</h3><p>Every candidate is filtered by max-loss, total-exposure, and position-count caps before anything else sees it.</p></div>
-      <div class="step"><div class="step-num">03</div><h3>Claude reasons</h3><p>What survives the gates is judged by Claude for trade quality, data sanity, and portfolio-level redundancy.</p></div>
-      <div class="step"><div class="step-num">04</div><h3>Execute on Alpaca</h3><p>Approved trades go out as net-credit limit orders through Alpaca's official CLI — the same tool built for unattended agents.</p></div>
+    <div class="reveal" id="flow-wrap">
+      <div class="flow-row" id="flow-row">
+        <div class="flow-line"><div class="flow-line-fill"></div></div>
+        <div class="node-circle">01</div>
+        <div class="node-circle">02</div>
+        <div class="node-circle">03</div>
+        <div class="node-circle">04</div>
+      </div>
+      <div class="flow-cards">
+        <div class="flow-card"><h3>Scan the universe</h3><p>Pulls live option chains across 15 liquid names and builds defined-risk credit spreads sized off each name's own realized volatility.</p></div>
+        <div class="flow-card"><h3>Hard risk gates</h3><p>Every candidate is filtered by max-loss, total-exposure, and position-count caps before anything else sees it.</p></div>
+        <div class="flow-card"><h3>Claude reasons</h3><p>What survives the gates is judged by Claude for trade quality, data sanity, and portfolio-level redundancy.</p></div>
+        <div class="flow-card"><h3>Execute on Alpaca</h3><p>Approved trades go out as net-credit limit orders through Alpaca's official CLI — the same tool built for unattended agents.</p></div>
+      </div>
     </div>
   </div>
 </section>
 
 <section id="risk">
   <div class="wrap">
-    <div class="section-head">
+    <div class="section-head reveal">
       <div class="kicker">Risk Gates</div>
       <h2>The AI can reject a trade. It can never approve one that breaks these.</h2>
-      <p>Enforced in code, before the reasoning step ever runs.</p>
+      <p>Enforced in code, before the reasoning step ever runs — armed on every cycle, no exceptions.</p>
     </div>
-    <div class="gates">
-      <div class="gate"><div class="num">3%</div><div class="label">Max loss per trade</div></div>
-      <div class="gate"><div class="num">15%</div><div class="label">Max total open risk</div></div>
-      <div class="gate"><div class="num">6</div><div class="label">Max open positions</div></div>
-      <div class="gate"><div class="num">5%</div><div class="label">Daily loss circuit breaker</div></div>
+    <div class="breaker-panel reveal-stagger reveal">
+      <div class="breaker-row r-item">
+        <div class="breaker-led"></div><div class="breaker-switch"></div>
+        <div class="breaker-label">Max loss per trade</div>
+        <span class="breaker-armed">Armed</span>
+        <div class="breaker-value">3%</div>
+      </div>
+      <div class="breaker-row r-item">
+        <div class="breaker-led"></div><div class="breaker-switch"></div>
+        <div class="breaker-label">Max total open risk</div>
+        <span class="breaker-armed">Armed</span>
+        <div class="breaker-value">15%</div>
+      </div>
+      <div class="breaker-row r-item">
+        <div class="breaker-led"></div><div class="breaker-switch"></div>
+        <div class="breaker-label">Max open positions</div>
+        <span class="breaker-armed">Armed</span>
+        <div class="breaker-value">6</div>
+      </div>
+      <div class="breaker-row r-item">
+        <div class="breaker-led"></div><div class="breaker-switch"></div>
+        <div class="breaker-label">Daily loss circuit breaker</div>
+        <span class="breaker-armed">Armed</span>
+        <div class="breaker-value">5%</div>
+      </div>
     </div>
   </div>
 </section>
 
 <section id="stack">
   <div class="wrap">
-    <div class="section-head">
+    <div class="section-head reveal">
       <div class="kicker">Built With</div>
       <h2>Alpaca's full agent stack</h2>
     </div>
-    <div class="stack">
-      <span class="chip">⚡ <b>Alpaca Trading API</b></span>
-      <span class="chip">⌨️ <b>Alpaca CLI</b> for autonomous execution</span>
-      <span class="chip">🔌 <b>Alpaca MCP Server</b> for interactive dev</span>
-      <span class="chip">🧠 <b>Claude</b> reasoning layer</span>
-      <span class="chip">📄 <b>Paper Trading</b> — $100k, options level 3</span>
+    <div class="stack-grid reveal-stagger reveal">
+      <div class="stack-item r-item">
+        <svg class="stack-icon" width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2 4 14h6l-1 8 9-12h-6z"/></svg>
+        <h4>Trading API</h4><p>Order execution &amp; account data</p>
+      </div>
+      <div class="stack-item r-item">
+        <svg class="stack-icon" width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M7 9l4 3-4 3"/><line x1="13" y1="15" x2="17" y2="15"/></svg>
+        <h4>Alpaca CLI</h4><p>Autonomous, unattended execution</p>
+      </div>
+      <div class="stack-item r-item">
+        <svg class="stack-icon" width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 2v4M16 2v4M6 8h12v3a6 6 0 0 1-12 0V8Z"/><path d="M10 19v3M14 19v3"/></svg>
+        <h4>MCP Server</h4><p>Interactive dev &amp; testing</p>
+      </div>
+      <div class="stack-item r-item">
+        <svg class="stack-icon" width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="6" width="12" height="12" rx="2"/><path d="M9 3v3M15 3v3M9 18v3M15 18v3M3 9h3M3 15h3M18 9h3M18 15h3"/></svg>
+        <h4>Claude</h4><p>Trade-quality reasoning layer</p>
+      </div>
+      <div class="stack-item r-item">
+        <svg class="stack-icon" width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l8 4v6c0 5-3.5 8.5-8 10-4.5-1.5-8-5-8-10V6l8-4Z"/><path d="M9 12l2 2 4-4"/></svg>
+        <h4>Paper Trading</h4><p>$100k · options level 3</p>
+      </div>
     </div>
   </div>
 </section>
 
 <section>
   <div class="wrap">
-    <div class="cta-band">
+    <div class="cta-band reveal">
       <h2>See it trading right now</h2>
       <p>Live equity, open positions, and the AI's actual reasoning for every trade it takes or skips.</p>
       <a class="btn btn-primary btn-lg" href="live.html">Open the Live Dashboard →</a>
@@ -267,6 +379,33 @@ fetch(STATUS_URL + "?t=" + Date.now(), { cache: "no-store" })
     document.getElementById("ls-pos").textContent = s.positions.length;
   })
   .catch(() => { document.getElementById("ls-status").textContent = "Starting…"; });
+
+// Scroll-reveal (with a safety net so content is never stuck invisible if IO misbehaves)
+const revealObserver = new IntersectionObserver((entries) => {
+  entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add("in"); revealObserver.unobserve(e.target); } });
+}, { threshold: 0.1 });
+document.querySelectorAll(".reveal").forEach(el => revealObserver.observe(el));
+setTimeout(() => document.querySelectorAll(".reveal:not(.in)").forEach(el => el.classList.add("in")), 1200);
+
+const flowRow = document.getElementById("flow-row");
+if (flowRow) {
+  new IntersectionObserver((entries, obs) => {
+    entries.forEach(e => { if (e.isIntersecting) { flowRow.classList.add("in"); obs.disconnect(); } });
+  }, { threshold: 0.3 }).observe(flowRow);
+  setTimeout(() => flowRow.classList.add("in"), 1500);
+}
+
+// Active nav link on scroll
+const sections = ["how", "risk"].map(id => document.getElementById(id)).filter(Boolean);
+const navLinks = document.querySelectorAll('.nav-links a[href^="#"]');
+const navObserver = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      navLinks.forEach(a => a.classList.toggle("active", a.getAttribute("href") === "#" + e.target.id));
+    }
+  });
+}, { rootMargin: "-40% 0px -50% 0px" });
+sections.forEach(s => navObserver.observe(s));
 </script>
 
 </body>
