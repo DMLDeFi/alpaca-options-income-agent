@@ -87,5 +87,19 @@ def run_cycle() -> dict:
 if __name__ == "__main__":
     try:
         run_cycle()
+    except Exception as exc:
+        # A network blip or transient API error shouldn't produce a bare crash with no
+        # record of what happened — log it as a distinct cycle status instead.
+        log_cycle(
+            {
+                "timestamp": datetime.datetime.now(datetime.timezone.utc).isoformat(),
+                "status": "error",
+                "reason": str(exc),
+            }
+        )
+        print(f"Cycle failed: {exc}")
     finally:
-        publish.write_status()
+        try:
+            publish.write_status()
+        except Exception as exc:
+            print(f"Could not publish status (likely no network): {exc}")

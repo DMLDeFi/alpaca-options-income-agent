@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-28T23:55:26.825678+00:00",
+  "generated_at": "2026-08-31T00:50:42.037310+00:00",
   "account": {
     "equity": "100000",
     "cash": "100000",
@@ -30,6 +30,12 @@
     },
     {
       "timestamp": "2026-08-28T23:55:11.232312+00:00",
+      "equity": "100000",
+      "dry_run": false,
+      "status": "skipped_market_closed"
+    },
+    {
+      "timestamp": "2026-08-31T00:50:38.032711+00:00",
       "equity": "100000",
       "dry_run": false,
       "status": "skipped_market_closed"

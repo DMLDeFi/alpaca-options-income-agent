@@ -221,6 +221,9 @@ function renderFeed(cycles) {
     if (c.status === "skipped_market_closed") {
       return `<div class="cycle"><div class="cycle-head"><span class="cycle-time">${time}</span><span class="cycle-status status-quiet">Market closed</span></div></div>`;
     }
+    if (c.status === "error") {
+      return `<div class="cycle"><div class="cycle-head"><span class="cycle-time">${time}</span><span class="cycle-status status-halt">Cycle failed</span></div><div class="decision-reason">${c.reason || "Unknown error"}</div></div>`;
+    }
     if (c.status === "halted_circuit_breaker") {
       return `<div class="cycle"><div class="cycle-head"><span class="cycle-time">${time}</span><span class="cycle-status status-halt">Circuit breaker</span></div><div class="decision-reason">${c.reason || ""}</div></div>`;
     }

@@ -1,25 +1,35 @@
 import json
 import subprocess
+import time
 
 from config import ALPACA_API_KEY, ALPACA_BIN, ALPACA_SECRET_KEY
 
 _ENV = {"ALPACA_API_KEY": ALPACA_API_KEY, "ALPACA_SECRET_KEY": ALPACA_SECRET_KEY}
 
 
-def _run(args: list[str]):
+def _run(args: list[str], retries: int = 3, retry_delay: float = 10.0):
     import os
 
     env = {**os.environ, **_ENV}
-    result = subprocess.run(
-        [ALPACA_BIN, *args],
-        capture_output=True,
-        text=True,
-        env=env,
-        timeout=30,
-    )
-    if result.returncode != 0:
-        raise RuntimeError(f"alpaca {' '.join(args)} failed: {result.stderr.strip()}")
-    return json.loads(result.stdout) if result.stdout.strip() else None
+    last_error = None
+    for attempt in range(retries):
+        result = subprocess.run(
+            [ALPACA_BIN, *args],
+            capture_output=True,
+            text=True,
+            env=env,
+            timeout=30,
+        )
+        if result.returncode == 0:
+            return json.loads(result.stdout) if result.stdout.strip() else None
+        last_error = result.stderr.strip()
+        # Transient network blips (DNS lookup failures, dropped connections) are common on
+        # this network — retry a few times before giving up rather than failing the whole cycle.
+        if "dial tcp" not in last_error and "no such host" not in last_error:
+            break
+        if attempt < retries - 1:
+            time.sleep(retry_delay)
+    raise RuntimeError(f"alpaca {' '.join(args)} failed: {last_error}")
 
 
 def get_account() -> dict:
