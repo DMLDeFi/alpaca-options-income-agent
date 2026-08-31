@@ -1,10 +1,10 @@
 {
-  "generated_at": "2026-08-31T16:38:00.748382+00:00",
+  "generated_at": "2026-08-31T19:53:38.826616+00:00",
   "account": {
-    "equity": "99685.7",
+    "equity": "99655.7",
     "cash": "100169.7",
     "buying_power": "395678.8",
-    "portfolio_value": "99685.7",
+    "portfolio_value": "99655.7",
     "options_trading_level": 3,
     "status": "ACTIVE"
   },
@@ -13,45 +13,45 @@
       "symbol": "IWM260911P00283000",
       "qty": "1",
       "side": "long",
-      "market_value": "69",
-      "unrealized_pl": "9",
-      "unrealized_plpc": "0.15",
+      "market_value": "56",
+      "unrealized_pl": "-4",
+      "unrealized_plpc": "-0.06667",
       "avg_entry_price": "0.6"
     },
     {
       "symbol": "IWM260911P00287000",
       "qty": "-1",
       "side": "short",
-      "market_value": "-127",
-      "unrealized_pl": "-27",
-      "unrealized_plpc": "-0.27",
+      "market_value": "-104",
+      "unrealized_pl": "-4",
+      "unrealized_plpc": "-0.04",
       "avg_entry_price": "1"
     },
     {
       "symbol": "JPM260918C00367500",
       "qty": "-1",
       "side": "short",
-      "market_value": "-235",
-      "unrealized_pl": "-54",
-      "unrealized_plpc": "-0.29834",
+      "market_value": "-238",
+      "unrealized_pl": "-57",
+      "unrealized_plpc": "-0.31492",
       "avg_entry_price": "1.81"
     },
     {
       "symbol": "JPM260918C00372500",
       "qty": "1",
       "side": "long",
-      "market_value": "98",
-      "unrealized_pl": "-28",
-      "unrealized_plpc": "-0.22222",
+      "market_value": "76",
+      "unrealized_pl": "-50",
+      "unrealized_plpc": "-0.39683",
       "avg_entry_price": "1.26"
     },
     {
       "symbol": "JPM260918P00345000",
       "qty": "1",
       "side": "long",
-      "market_value": "222",
-      "unrealized_pl": "-83",
-      "unrealized_plpc": "-0.27213",
+      "market_value": "183",
+      "unrealized_pl": "-122",
+      "unrealized_plpc": "-0.4",
       "avg_entry_price": "3.05"
     },
     {
@@ -67,54 +67,54 @@
       "symbol": "NFLX260918C00087000",
       "qty": "-1",
       "side": "short",
-      "market_value": "-58",
-      "unrealized_pl": "-2",
-      "unrealized_plpc": "-0.03571",
+      "market_value": "-54",
+      "unrealized_pl": "2",
+      "unrealized_plpc": "0.03571",
       "avg_entry_price": "0.56"
     },
     {
       "symbol": "NFLX260918C00088000",
       "qty": "1",
       "side": "long",
-      "market_value": "41",
-      "unrealized_pl": "-3",
-      "unrealized_plpc": "-0.06818",
+      "market_value": "39",
+      "unrealized_pl": "-5",
+      "unrealized_plpc": "-0.11364",
       "avg_entry_price": "0.44"
     },
     {
       "symbol": "NFLX260918P00075000",
       "qty": "1",
       "side": "long",
-      "market_value": "28",
-      "unrealized_pl": "-7",
-      "unrealized_plpc": "-0.2",
+      "market_value": "27",
+      "unrealized_pl": "-8",
+      "unrealized_plpc": "-0.22857",
       "avg_entry_price": "0.35"
     },
     {
       "symbol": "NFLX260918P00076000",
       "qty": "-1",
       "side": "short",
-      "market_value": "-39",
-      "unrealized_pl": "5",
-      "unrealized_plpc": "0.11364",
+      "market_value": "-41",
+      "unrealized_pl": "3",
+      "unrealized_plpc": "0.06818",
       "avg_entry_price": "0.44"
     },
     {
       "symbol": "XOM260918P00152500",
       "qty": "1",
       "side": "long",
-      "market_value": "120",
-      "unrealized_pl": "-19",
-      "unrealized_plpc": "-0.13669",
+      "market_value": "104",
+      "unrealized_pl": "-35",
+      "unrealized_plpc": "-0.2518",
       "avg_entry_price": "1.39"
     },
     {
       "symbol": "XOM260918P00155000",
       "qty": "-1",
       "side": "short",
-      "market_value": "-217",
-      "unrealized_pl": "-59",
-      "unrealized_plpc": "-0.37342",
+      "market_value": "-177",
+      "unrealized_pl": "-19",
+      "unrealized_plpc": "-0.12025",
       "avg_entry_price": "1.58"
     }
   ],
@@ -602,6 +602,24 @@
           }
         }
       ]
+    },
+    {
+      "timestamp": "2026-08-31T16:40:09.833060+00:00",
+      "equity": "99699.7",
+      "dry_run": false,
+      "status": "ran",
+      "candidates_found": 11,
+      "candidates_risk_approved": 0,
+      "decisions": []
+    },
+    {
+      "timestamp": "2026-08-31T19:51:44.010302+00:00",
+      "equity": "99655.7",
+      "dry_run": false,
+      "status": "ran",
+      "candidates_found": 12,
+      "candidates_risk_approved": 0,
+      "decisions": []
     }
   ]
 }
