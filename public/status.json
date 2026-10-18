@@ -1,127 +1,54 @@
 {
-  "generated_at": "2026-09-03T02:40:14.835922+00:00",
+  "generated_at": "2026-10-18T13:50:42.632645+00:00",
   "account": {
-    "equity": "99731.41",
-    "cash": "100169.41",
-    "buying_power": "395677.64",
-    "portfolio_value": "99731.41",
+    "equity": "99629.3",
+    "cash": "99629.3",
+    "buying_power": "398517.2",
+    "portfolio_value": "99629.3",
     "options_trading_level": 3,
     "status": "ACTIVE"
   },
-  "positions": [
-    {
-      "symbol": "IWM260911P00283000",
-      "qty": "1",
-      "side": "long",
-      "market_value": "49",
-      "unrealized_pl": "-11",
-      "unrealized_plpc": "-0.18333",
-      "avg_entry_price": "0.6"
-    },
-    {
-      "symbol": "IWM260911P00287000",
-      "qty": "-1",
-      "side": "short",
-      "market_value": "-97",
-      "unrealized_pl": "3",
-      "unrealized_plpc": "0.03",
-      "avg_entry_price": "1"
-    },
-    {
-      "symbol": "JPM260918C00367500",
-      "qty": "-1",
-      "side": "short",
-      "market_value": "-220",
-      "unrealized_pl": "-39",
-      "unrealized_plpc": "-0.21547",
-      "avg_entry_price": "1.81"
-    },
-    {
-      "symbol": "JPM260918C00372500",
-      "qty": "1",
-      "side": "long",
-      "market_value": "91",
-      "unrealized_pl": "-35",
-      "unrealized_plpc": "-0.27778",
-      "avg_entry_price": "1.26"
-    },
-    {
-      "symbol": "JPM260918P00345000",
-      "qty": "1",
-      "side": "long",
-      "market_value": "181",
-      "unrealized_pl": "-124",
-      "unrealized_plpc": "-0.40656",
-      "avg_entry_price": "3.05"
-    },
-    {
-      "symbol": "JPM260918P00350000",
-      "qty": "-1",
-      "side": "short",
-      "market_value": "-360",
-      "unrealized_pl": "-20",
-      "unrealized_plpc": "-0.05882",
-      "avg_entry_price": "3.4"
-    },
-    {
-      "symbol": "NFLX260918C00087000",
-      "qty": "-1",
-      "side": "short",
-      "market_value": "-71",
-      "unrealized_pl": "-15",
-      "unrealized_plpc": "-0.26786",
-      "avg_entry_price": "0.56"
-    },
-    {
-      "symbol": "NFLX260918C00088000",
-      "qty": "1",
-      "side": "long",
-      "market_value": "50",
-      "unrealized_pl": "6",
-      "unrealized_plpc": "0.13636",
-      "avg_entry_price": "0.44"
-    },
-    {
-      "symbol": "NFLX260918P00075000",
-      "qty": "1",
-      "side": "long",
-      "market_value": "19",
-      "unrealized_pl": "-16",
-      "unrealized_plpc": "-0.45714",
-      "avg_entry_price": "0.35"
-    },
-    {
-      "symbol": "NFLX260918P00076000",
-      "qty": "-1",
-      "side": "short",
-      "market_value": "-27",
-      "unrealized_pl": "17",
-      "unrealized_plpc": "0.38636",
-      "avg_entry_price": "0.44"
-    },
-    {
-      "symbol": "XOM260918P00152500",
-      "qty": "1",
-      "side": "long",
-      "market_value": "45",
-      "unrealized_pl": "-94",
-      "unrealized_plpc": "-0.67626",
-      "avg_entry_price": "1.39"
-    },
-    {
-      "symbol": "XOM260918P00155000",
-      "qty": "-1",
-      "side": "short",
-      "market_value": "-98",
-      "unrealized_pl": "60",
-      "unrealized_plpc": "0.37975",
-      "avg_entry_price": "1.58"
-    }
-  ],
+  "positions": [],
   "cycles": [
     {
       "timestamp": "2026-09-03T02:40:11.099476+00:00",
       "equity": "99731.41",
+      "dry_run": false,
+      "status": "skipped_market_closed"
+    },
+    {
+      "timestamp": "2026-09-03T17:52:27.194163+00:00",
+      "status": "error",
+      "reason": "alpaca account get failed: {\n  \"code\": 0,\n  \"error\": \"could not reach https://paper-api.alpaca.markets/v2/account: Get \\\"https://paper-api.alpaca.markets/v2/account\\\": dial tcp: lookup paper-api.alpaca.markets: no such host\",\n  \"hint\": \"check your internet connection and base URL. Run `alpaca doctor` to verify configuration\",\n  \"status\": 0\n}"
+    },
+    {
+      "timestamp": "2026-09-10T13:42:23.989391+00:00",
+      "status": "error",
+      "reason": "alpaca account get failed: {\n  \"code\": 0,\n  \"error\": \"could not reach https://paper-api.alpaca.markets/v2/account: Get \\\"https://paper-api.alpaca.markets/v2/account\\\": dial tcp: lookup paper-api.alpaca.markets: no such host\",\n  \"hint\": \"check your internet connection and base URL. Run `alpaca doctor` to verify configuration\",\n  \"status\": 0\n}"
+    },
+    {
+      "timestamp": "2026-09-11T13:35:22.653199+00:00",
+      "status": "error",
+      "reason": "alpaca account get failed: {\n  \"code\": 0,\n  \"error\": \"could not reach https://paper-api.alpaca.markets/v2/account: Get \\\"https://paper-api.alpaca.markets/v2/account\\\": dial tcp: lookup paper-api.alpaca.markets: no such host\",\n  \"hint\": \"check your internet connection and base URL. Run `alpaca doctor` to verify configuration\",\n  \"status\": 0\n}"
+    },
+    {
+      "timestamp": "2026-09-15T22:53:14.874402+00:00",
+      "status": "error",
+      "reason": "alpaca account get failed: {\n  \"code\": 0,\n  \"error\": \"could not reach https://paper-api.alpaca.markets/v2/account: Get \\\"https://paper-api.alpaca.markets/v2/account\\\": dial tcp: lookup paper-api.alpaca.markets: no such host\",\n  \"hint\": \"check your internet connection and base URL. Run `alpaca doctor` to verify configuration\",\n  \"status\": 0\n}"
+    },
+    {
+      "timestamp": "2026-09-22T14:09:04.693900+00:00",
+      "status": "error",
+      "reason": "alpaca account get failed: {\n  \"code\": 0,\n  \"error\": \"could not reach https://paper-api.alpaca.markets/v2/account: Get \\\"https://paper-api.alpaca.markets/v2/account\\\": dial tcp: lookup paper-api.alpaca.markets: no such host\",\n  \"hint\": \"check your internet connection and base URL. Run `alpaca doctor` to verify configuration\",\n  \"status\": 0\n}"
+    },
+    {
+      "timestamp": "2026-09-25T13:38:41.782713+00:00",
+      "status": "error",
+      "reason": "alpaca account get failed: {\n  \"code\": 0,\n  \"error\": \"could not reach https://paper-api.alpaca.markets/v2/account: Get \\\"https://paper-api.alpaca.markets/v2/account\\\": dial tcp: lookup paper-api.alpaca.markets: no such host\",\n  \"hint\": \"check your internet connection and base URL. Run `alpaca doctor` to verify configuration\",\n  \"status\": 0\n}"
+    },
+    {
+      "timestamp": "2026-10-18T13:50:06.712572+00:00",
+      "equity": "99629.3",
       "dry_run": false,
       "status": "skipped_market_closed"
     }
