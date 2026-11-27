@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-11-20T13:35:06.972025+00:00",
+  "generated_at": "2026-11-27T13:35:52.119419+00:00",
   "account": {
     "equity": "99629.3",
     "cash": "99629.3",
@@ -57,6 +57,11 @@
       "equity": "99629.3",
       "dry_run": false,
       "status": "skipped_market_closed"
+    },
+    {
+      "timestamp": "2026-11-27T13:35:50.271389+00:00",
+      "status": "error",
+      "reason": "Command '['C:\\\\Users\\\\hp\\\\AppData\\\\Local\\\\AlpacaCLI\\\\alpaca.exe', 'account', 'get']' timed out after 30 seconds"
     }
   ]
 }
